@@ -54,7 +54,7 @@ class PlatformDeployer:
         # self._add_requirements()
 
         # self._conclude_automate_all()
-        # self._show_success_message()
+        self._show_success_message()
 
     # --- Helper methods for deploy() ---
 
@@ -77,7 +77,7 @@ class PlatformDeployer:
             self.deployed_project_name = dsd_config.deployed_project_name
             return
 
-        self._check_flyio_settings()
+        # self._check_flyio_settings()
         self._validate_cli()
 
         # Make sure a Fly.io app has been created, or create one if  using
@@ -86,7 +86,7 @@ class PlatformDeployer:
         self.deployed_project_name = self._get_deployed_project_name()
 
         # Create the db now, before any additional configuration.
-        self._create_db()
+        # self._create_db()
 
     def _prep_automate_all(self):
         """Take any further actions needed if using automate_all."""
@@ -139,6 +139,7 @@ class PlatformDeployer:
 
         context = {
             "django_project_name": dsd_config.local_project_name,
+            "nanodjango_script": dsd_config.nanodjango_script,
         }
 
         contents = plugin_utils.get_template_string(template_path, context)
@@ -162,6 +163,7 @@ class PlatformDeployer:
         template_path = self.templates_path / "fly.toml"
         context = {
             "deployed_project_name": self.deployed_project_name,
+            "nanodjango_script": dsd_config.nanodjango_script,
             "using_pipenv": (dsd_config.pkg_manager == "pipenv"),
             "vm_size": plugin_config.vm_size,
         }
