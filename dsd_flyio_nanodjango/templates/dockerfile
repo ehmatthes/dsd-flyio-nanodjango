@@ -19,7 +19,7 @@ RUN set -ex && \
 COPY . /code/
 
 # RUN ON_FLYIO_SETUP="1" python manage.py collectstatic --noinput
-RUN nanodjango counter.py collectstatic --noinput
+RUN nanodjango manage counter.py collectstatic --noinput
 
 EXPOSE 8000
 
