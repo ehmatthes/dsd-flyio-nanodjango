@@ -6,6 +6,18 @@ Changelog: dsd-flyio
 
 This is a proof-of-concept stage, to wort out the interaction between django-simple-deploy and nanodjango projects.
 
+### 0.2.0
+
+#### External changes
+
+- Supports fully-automated deployments, using the `--automate-all` flag.
+- Document the fully-automated workflow.
+
+#### Internal changes
+
+- Uncomment the prep and conclude automate all functions.
+
+
 ### 0.1.0
 
 #### External changes

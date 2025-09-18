@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dsd-flyio-nanodjango"
-version = "0.1.0"
+version = "0.2.0"
 description = "A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io"
 readme = "README.md"
 
