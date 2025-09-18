@@ -7,6 +7,7 @@ from importlib.metadata import version
 
 import pytest
 
+from tests.integration_tests.utils import manage_sample_project as msp
 from tests.integration_tests.utils import it_helper_functions as hf
 from tests.integration_tests.conftest import (
     tmp_project,
@@ -17,7 +18,17 @@ from tests.integration_tests.conftest import (
 )
 
 
+# Skip the default module-level `manage.py deploy call`, so we can call
+# `deploy` with our own set of plugin-specific CLI args.
+pytestmark = pytest.mark.skip_auto_dsd_call
+
+
 # --- Fixtures ---
+
+@pytest.fixture(scope="function", autouse=True)
+def make_deploy_call(reset_test_project, tmp_project):
+    cmd = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, cmd, platform="fly_io")
 
 
 # --- Test modifications to project files. ---
