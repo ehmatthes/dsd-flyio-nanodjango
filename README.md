@@ -1,11 +1,11 @@
 # dsd-flyio-nanodjango
 
-A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io
+A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io.
 
 Sample nanodjango project
 ---
 
-This is taken from the nanodjango docs. I'm recreating my steps here, so anyone can try this out without looking at a variety of docs.
+This is taken from the [nanodjango docs](https://docs.nanodjango.dev/en/latest/). I'm recreating my steps here, so anyone can try this out without looking at a variety of docs.
 
 Make a directory for the nanodjango project, install `nanodjango`, and create the main project file:
 ```sh
