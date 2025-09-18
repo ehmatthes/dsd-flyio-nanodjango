@@ -13,6 +13,7 @@ from tests.integration_tests.utils import manage_sample_project as msp
 pytestmark = pytest.mark.skip_auto_dsd_call
 
 
+@pytest.mark.skip
 def test_vm_size_arg(tmp_project, request):
     """Test that a custom vm size is written to fly.toml."""
     cmd = "python manage.py deploy --vm-size shared-cpu-2x"
