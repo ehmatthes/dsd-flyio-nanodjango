@@ -1,5 +1,3 @@
-# dsd-flyio
+# dsd-flyio-nanodjango
 
-A plugin for deploying Django projects to Fly.io, using django-simple-deploy.
-
-For full documentation, see the documentation for [django-simple-deploy](https://django-simple-deploy.readthedocs.io/en/latest/).
+A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io
