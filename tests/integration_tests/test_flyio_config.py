@@ -25,6 +25,13 @@ pytestmark = pytest.mark.skip_auto_dsd_call
 
 # --- Fixtures ---
 
+@pytest.fixture(scope="module", params=["req_txt", "poetry", "pipenv"])
+def reset_test_project(request, tmp_project):
+    """Reset the test project, so it can be used again by another test module,
+    which may be another platform.
+    """
+    msp.reset_test_project(tmp_project, request.param)
+
 @pytest.fixture(scope="function", autouse=True)
 def make_deploy_call(reset_test_project, tmp_project):
     cmd = "python manage.py deploy"
