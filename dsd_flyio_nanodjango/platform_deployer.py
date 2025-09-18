@@ -45,7 +45,7 @@ class PlatformDeployer:
 
         self._validate_platform()
 
-        # self._prep_automate_all()
+        self._prep_automate_all()
         # self._set_env_vars()
         self._add_dockerfile()
         self._add_dockerignore()
@@ -53,7 +53,7 @@ class PlatformDeployer:
         # self._modify_settings()
         # self._add_requirements()
 
-        # self._conclude_automate_all()
+        self._conclude_automate_all()
         self._show_success_message()
 
     # --- Helper methods for deploy() ---
