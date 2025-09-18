@@ -47,9 +47,9 @@ class PlatformDeployer:
 
         # self._prep_automate_all()
         # self._set_env_vars()
-        # self._add_dockerfile()
-        # self._add_dockerignore()
-        # self._add_flytoml()
+        self._add_dockerfile()
+        self._add_dockerignore()
+        self._add_flytoml()
         # self._modify_settings()
         # self._add_requirements()
 
