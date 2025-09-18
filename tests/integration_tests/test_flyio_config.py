@@ -28,7 +28,7 @@ def test_settings(tmp_project):
     This function only checks the entire settings file. It does not examine
       individual settings.
     """
-    hf.check_reference_file(tmp_project, "blog/settings.py", "dsd-flyio")
+    hf.check_reference_file(tmp_project, "blog/settings.py", "dsd-flyio-nanodjango")
 
 
 def test_requirements_txt(tmp_project, pkg_manager, tmp_path, dsd_version):
@@ -38,7 +38,7 @@ def test_requirements_txt(tmp_project, pkg_manager, tmp_path, dsd_version):
         hf.check_reference_file(
             tmp_project,
             "requirements.txt",
-            "dsd-flyio",
+            "dsd-flyio-nanodjango",
             context=context,
             tmp_path=tmp_path,
         )
@@ -55,7 +55,7 @@ def test_pyproject_toml(tmp_project, pkg_manager, tmp_path, dsd_version):
         hf.check_reference_file(
             tmp_project,
             "pyproject.toml",
-            "dsd-flyio",
+            "dsd-flyio-nanodjango",
             context=context,
             tmp_path=tmp_path,
         )
@@ -68,13 +68,13 @@ def test_pipfile(tmp_project, pkg_manager, tmp_path, dsd_version):
     elif pkg_manager == "pipenv":
         context = {"current-version": dsd_version}
         hf.check_reference_file(
-            tmp_project, "Pipfile", "dsd-flyio", context=context, tmp_path=tmp_path
+            tmp_project, "Pipfile", "dsd-flyio-nanodjango", context=context, tmp_path=tmp_path
         )
 
 
 def test_gitignore(tmp_project):
     """Test that .gitignore has been modified correctly."""
-    hf.check_reference_file(tmp_project, ".gitignore", "dsd-flyio")
+    hf.check_reference_file(tmp_project, ".gitignore", "dsd-flyio-nanodjango")
 
 
 # --- Test Fly.io-specific files ---
@@ -83,29 +83,29 @@ def test_gitignore(tmp_project):
 def test_creates_fly_toml_file(tmp_project, pkg_manager):
     """Verify that fly.toml is created correctly."""
     if pkg_manager in ("req_txt", "poetry"):
-        hf.check_reference_file(tmp_project, "fly.toml", "dsd-flyio")
+        hf.check_reference_file(tmp_project, "fly.toml", "dsd-flyio-nanodjango")
     elif pkg_manager == "pipenv":
         hf.check_reference_file(
-            tmp_project, "fly.toml", "dsd-flyio", reference_filename="pipenv.fly.toml"
+            tmp_project, "fly.toml", "dsd-flyio-nanodjango", reference_filename="pipenv.fly.toml"
         )
 
 
 def test_creates_dockerfile(tmp_project, pkg_manager):
     """Verify that dockerfile is created correctly."""
     if pkg_manager == "req_txt":
-        hf.check_reference_file(tmp_project, "Dockerfile", "dsd-flyio")
+        hf.check_reference_file(tmp_project, "Dockerfile", "dsd-flyio-nanodjango")
     elif pkg_manager == "poetry":
         hf.check_reference_file(
             tmp_project,
             "Dockerfile",
-            "dsd-flyio",
+            "dsd-flyio-nanodjango",
             reference_filename="poetry.dockerfile",
         )
     elif pkg_manager == "pipenv":
         hf.check_reference_file(
             tmp_project,
             "Dockerfile",
-            "dsd-flyio",
+            "dsd-flyio-nanodjango",
             reference_filename="pipenv.dockerfile",
         )
 
@@ -118,7 +118,7 @@ def test_creates_dockerignore_file(tmp_project):
         reference_file = ".dockerignore-linux"
     else:
         reference_file = ".dockerignore"
-    hf.check_reference_file(tmp_project, ".dockerignore", "dsd-flyio", reference_file)
+    hf.check_reference_file(tmp_project, ".dockerignore", "dsd-flyio-nanodjango", reference_file)
 
 
 # --- Test logs ---
@@ -157,7 +157,7 @@ def test_log_dir(tmp_project):
         "INFO: Deployment target: Fly.io" in log_file_text
         or "INFO: Deployment target: Fly.io" in log_file_text
     )
-    assert "INFO:   Using plugin: dsd_flyio" in log_file_text
+    assert "INFO:   Using plugin: dsd_flyio_nanodjango" in log_file_text
     assert "INFO: Local project name: blog" in log_file_text
     assert "INFO: git status --porcelain" in log_file_text
     assert "INFO: ?? dsd_logs/" in log_file_text
