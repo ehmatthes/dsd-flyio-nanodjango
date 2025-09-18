@@ -159,11 +159,70 @@ Destroying an app is not reversible.
 Destroyed app nameless-bird-5390
 ```
 
+Fully-automated deployment
+---
 
+You can deploy the project in just a few steps using the `--automate-all` flag from `django-simple-deploy`.
 
+Install this plugin:
 
+```sh
+$ uv pip install dsd-flyio-nanodjango
+ + django-simple-deploy==1.3.0
+ + dsd-flyio-nanodjango==0.1.0
+ (.venv) my_nd_project$ uv pip freeze > requirements.txt
+```
 
+Add `django_simple_deploy` to the project script:
 
+```python
+from django.db import models
+from nanodjango import Django
+
+app = Django(
+    EXTRA_APPS=["django_simple_deploy"],
+)
+
+@app.admin
+class CountLog(models.Model):
+    ...
+```
+
+Commit all these changes:
+
+```sh
+(.venv) my_nd_project$ git add .
+(.venv) my_nd_project$ git commit -am "Initial setup, and added django-simple-deploy."
+```
+
+Call `deploy`, with the `--automate-all` flag:
+
+We're ready to call `deploy`, which will configure for deployment to Fly:
+
+```sh
+(.venv) my_nd_project$ nanodjango manage counter.py deploy --automate-all
+...
+Deployment target: Fly.io
+  Using plugin: dsd_flyio_nanodjango`
+...
+--- Your project should now be deployed on Fly.io ---
+
+It should have opened up in a new browser tab. If you see a
+  "server not available" message, wait a minute or two and
+  refresh the tab. It sometimes takes a few minutes for the
+  server to be ready.
+- You can also visit your project at https://billowing-leaf-3573.fly.dev/
+...
+```
+
+When you're satisfied it works, make sure to destroy the deployed app if you don't want to accrue charges:
+
+```sh
+(.venv) my_nd_project$ fly apps destroy nameless-bird-5390
+Destroying an app is not reversible.
+? Destroy app nameless-bird-5390? Yes
+Destroyed app nameless-bird-5390
+```
 
 
 
