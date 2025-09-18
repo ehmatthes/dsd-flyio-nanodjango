@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dsd-flyio"
-version = "1.2.1"
-description = "A plugin for django-simple-deploy, supporting deployments to Fly.io."
+name = "dsd-flyio-nanodjango"
+version = "0.0.1"
+description = "A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io"
 readme = "README.md"
 
 authors = [
@@ -49,13 +49,13 @@ dev = [
 ]
 
 [project.urls]
-"Documentation" = "https://github.com/django-simple-deploy/dsd-flyio"
-"GitHub" = "https://github.com/django-simple-deploy/dsd-flyio"
-"Changelog" = "https://github.com/django-simple-deploy/dsd-flyio/blob/main/CHANGELOG.md"
+"Documentation" = "https://github.com/ehmatthes/dsd-flyio-nanodjango"
+"GitHub" = "https://github.com/ehmatthes/dsd-flyio-nanodjango"
+"Changelog" = "https://github.com/ehmatthes/dsd-flyio-nanodjango/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 packages = [
-    "dsd_flyio",
-    "dsd_flyio.templates",
+    "dsd_flyio_nanodjango",
+    "dsd_flyio_nanodjango.templates",
 ]
 include-package-data = true
