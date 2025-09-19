@@ -85,7 +85,7 @@ Untracked files:
 	Dockerfile
 	fly.toml
 (.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Configured for deployment to Fly."
+(.venv) nd_counter$ git commit -m "Configured for deployment to Fly."
 ```
 
 django-simple-deploy wrote all the changes necessary to serve the project on Fly.io. Now make the actual push to Fly:
