@@ -2,87 +2,31 @@
 
 A proof-of-concept django-simple-deploy plugin that deploys nanodjango projects to Fly.io.
 
-Sample nanodjango project
+Setup
 ---
 
-This is taken from the [nanodjango docs](https://docs.nanodjango.dev/en/latest/). I'm recreating my steps here, so anyone can try this out without looking at a variety of docs.
+If you don't have a sample nanodjango project to work with, you can clone the [nd_counter](https://github.com/ehmatthes/nd_counter) repo. This is a simple nanodjango project, taken from the [Getting started](https://docs.nanodjango.dev/en/latest/get_started/) docs.
 
-Make a directory for the nanodjango project, install `nanodjango`, and create the main project file:
+You can clone this repository, run it once locally, and then deploy it.
 
 ```sh
-$ mkdir nd_counter
+$ git clone https://github.com/ehmatthes/nd_counter.git
 $ cd nd_counter
 nd_counter$ uv venv .venv
 nd_counter$ source .venv/bin/activate
-(.venv) nd_counter$ uv pip install nanodjango
-(.venv) nd_counter$ touch counter.py
-```
-
-Here's what goes in `counter.py`:
-
-```python
-from django.db import models
-from nanodjango import Django
-
-app = Django()
-
-@app.admin
-class CountLog(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-@app.route("/")
-def count(request):
-    # Standard Django function view
-    CountLog.objects.create()
-    return f"<p>Number of requests: {CountLog.objects.count()}</p>"
-
-@app.api.get("/add")
-def count(request):
-    # Django Ninja API
-    CountLog.objects.create()
-    return {"count": CountLog.objects.count()}
-```
-
-Add `.gitignore`, commit the project, and run the project locally:
-
-```sh
-(.venv) nd_counter$ ls -al
-.gitignore
-counter.py
-(.venv) nd_counter$ git init
-(.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Initial nanodjango project."
+(.venv) nd_counter$ uv pip install -r requirements.txt
 (.venv) nd_counter$ nanodjango run counter.py
-Starting development server at http://0.0.0.0:8000/
-...
 ```
 
-You should visit the locally-served project, and make sure it works.
-
-Calling `run` creates the initial migrations, so let's commit:
-
-```sh
-(.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Initial migration."
-```
-
-Now let's freeze the initial requirements:
-
-```sh
-(.venv) nd_counter$ uv pip freeze > requirements.txt
-(.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Initial requirements."
-```
-
-Configuration-only deployment
+Adding django-simple-deply
 ---
 
-Now we're ready for deployment. We'll install this plugin, which will also install `django-simple-deploy`. We'll also freeze requirements:
+Installing this plugin will automatically install django-simple-deploy. Let's install the plugin, and freeze the requirements:
 
 ```sh
 $ uv pip install dsd-flyio-nanodjango
  + django-simple-deploy==1.3.0
- + dsd-flyio-nanodjango==0.1.0
+ + dsd-flyio-nanodjango==0.2.0
  (.venv) nd_counter$ uv pip freeze > requirements.txt
 ```
 
@@ -95,28 +39,29 @@ from nanodjango import Django
 app = Django(
     EXTRA_APPS=["django_simple_deploy"],
 )
-
-@app.admin
-class CountLog(models.Model):
-    ...
+...
 ```
 
-We'll commit all these changes:
+Let's commit these changes:
 
 ```sh
 (.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Initial setup, and added django-simple-deploy."
+(.venv) nd_counter$ git commit -m "Added django-simple-deploy and plugin."
 ```
 
+Configuration-only deployment
+---
 
-Now we'll make an empty project on Fly.io that we can deploy to:
+In the configuration-only approach, you make the necessary resources on the remote server, review changes, commit them, and then push the project to the hosting platform.
+
+Make an empty project on Fly.io that we can deploy to:
 
 ```sh
 (.venv) nd_counter$ fly apps create --generate-name
 New app created: nameless-bird-5390
 ```
 
-We're ready to call `deploy`, which will configure for deployment to Fly:
+Now call `deploy`, which will configure for deployment to Fly:
 
 ```sh
 (.venv) nd_counter$ nanodjango manage counter.py deploy
@@ -128,7 +73,7 @@ Deployment target: Fly.io
 ...
 ```
 
-We can inspect the changes, and commit them:
+Inspect the changes, and commit them:
 
 ```sh
 (.venv) nd_counter$ git status
@@ -143,7 +88,7 @@ Untracked files:
 (.venv) nd_counter$ git commit -am "Configured for deployment to Fly."
 ```
 
-Now we make the actual push to Fly:
+django-simple-deploy wrote all the changes necessary to serve the project on Fly.io. Now make the actual push to Fly:
 
 ```sh
 (.venv) nd_counter$ fly deploy
@@ -157,7 +102,7 @@ Once the push finishes, you can open the deployed version of your project:
 opening https://nameless-bird-5390.fly.dev/ ...
 ```
 
-The counter will increment. In the 0.1.0 release of this plugin, the count will jump around because we're using SQLite on an ephemeral machine. Later releases will configure a persistent database.
+The counter will increment, as it did locally. In the 0.2.0 release of this plugin, the count will jump around because we're using SQLite on an ephemeral machine. Later releases will configure a persistent database.
 
 When you're satisfied it works, make sure to destroy the deployed app if you don't want to accrue charges:
 
@@ -171,42 +116,10 @@ Destroyed app nameless-bird-5390
 Fully-automated deployment
 ---
 
-You can deploy the project in just a few steps using the `--automate-all` flag from `django-simple-deploy`.
+The fully-automated approach creates any necessary remote resources, configures your project for deployment, commits changes, and pushes your project to the remote server.
 
-Install this plugin:
+This is done using the `--automate-all` flag:
 
-```sh
-$ uv pip install dsd-flyio-nanodjango
- + django-simple-deploy==1.3.0
- + dsd-flyio-nanodjango==0.1.0
- (.venv) nd_counter$ uv pip freeze > requirements.txt
-```
-
-Add `django_simple_deploy` to the project script:
-
-```python
-from django.db import models
-from nanodjango import Django
-
-app = Django(
-    EXTRA_APPS=["django_simple_deploy"],
-)
-
-@app.admin
-class CountLog(models.Model):
-    ...
-```
-
-Commit all these changes:
-
-```sh
-(.venv) nd_counter$ git add .
-(.venv) nd_counter$ git commit -am "Initial setup, and added django-simple-deploy."
-```
-
-Call `deploy`, with the `--automate-all` flag:
-
-We're ready to call `deploy`, which will configure for deployment to Fly:
 
 ```sh
 (.venv) nd_counter$ nanodjango manage counter.py deploy --automate-all
