@@ -6,6 +6,16 @@ Changelog: dsd-flyio
 
 This is a proof-of-concept stage, to wort out the interaction between django-simple-deploy and nanodjango projects.
 
+### (Unreleased)
+
+#### External changes
+
+- Base docs on cloning a demo nanodjango project from a separate repo.
+
+#### Internal changes
+
+- N/A
+
 ### 0.2.0
 
 #### External changes
