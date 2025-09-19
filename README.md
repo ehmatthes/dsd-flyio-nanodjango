@@ -8,13 +8,14 @@ Sample nanodjango project
 This is taken from the [nanodjango docs](https://docs.nanodjango.dev/en/latest/). I'm recreating my steps here, so anyone can try this out without looking at a variety of docs.
 
 Make a directory for the nanodjango project, install `nanodjango`, and create the main project file:
+
 ```sh
-$ mkdir my_nd_project
-$ cd my_nd_project
-my_nd_project$ uv venv .venv
-my_nd_project$ source .venv/bin/activate
-(.venv) my_nd_project$ uv pip install nanodjango
-(.venv) my_nd_project$ touch counter.py
+$ mkdir nd_counter
+$ cd nd_counter
+nd_counter$ uv venv .venv
+nd_counter$ source .venv/bin/activate
+(.venv) nd_counter$ uv pip install nanodjango
+(.venv) nd_counter$ touch counter.py
 ```
 
 Here's what goes in `counter.py`:
@@ -45,13 +46,13 @@ def count(request):
 Add `.gitignore`, commit the project, and run the project locally:
 
 ```sh
-(.venv) my_nd_project$ ls -l
+(.venv) nd_counter$ ls -al
 .gitignore
 counter.py
-(.venv) my_nd_project$ git init
-(.venv) my_nd_project$ git add .
-(.venv) my_nd_project$ git commit -am "Initial nanodjango project."
-(.venv) my_nd_project$ nanodjango run counter.py
+(.venv) nd_counter$ git init
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Initial nanodjango project."
+(.venv) nd_counter$ nanodjango run counter.py
 Starting development server at http://0.0.0.0:8000/
 ...
 ```
@@ -61,8 +62,16 @@ You should visit the locally-served project, and make sure it works.
 Calling `run` creates the initial migrations, so let's commit:
 
 ```sh
-(.venv) my_nd_project$ git add .
-(.venv) my_nd_project$ git commit -am "Initial migration."
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Initial migration."
+```
+
+Now let's freeze the initial requirements:
+
+```sh
+(.venv) nd_counter$ uv pip freeze > requirements.txt
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Initial requirements."
 ```
 
 Configuration-only deployment
@@ -74,7 +83,7 @@ Now we're ready for deployment. We'll install this plugin, which will also insta
 $ uv pip install dsd-flyio-nanodjango
  + django-simple-deploy==1.3.0
  + dsd-flyio-nanodjango==0.1.0
- (.venv) my_nd_project$ uv pip freeze > requirements.txt
+ (.venv) nd_counter$ uv pip freeze > requirements.txt
 ```
 
 Now we'll add `django_simple_deploy` to the project script:
@@ -95,22 +104,22 @@ class CountLog(models.Model):
 We'll commit all these changes:
 
 ```sh
-(.venv) my_nd_project$ git add .
-(.venv) my_nd_project$ git commit -am "Initial setup, and added django-simple-deploy."
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Initial setup, and added django-simple-deploy."
 ```
 
 
 Now we'll make an empty project on Fly.io that we can deploy to:
 
 ```sh
-(.venv) my_nd_project$ fly apps create --generate-name
+(.venv) nd_counter$ fly apps create --generate-name
 New app created: nameless-bird-5390
 ```
 
 We're ready to call `deploy`, which will configure for deployment to Fly:
 
 ```sh
-(.venv) my_nd_project$ nanodjango manage counter.py deploy
+(.venv) nd_counter$ nanodjango manage counter.py deploy
 ...
 Deployment target: Fly.io
   Using plugin: dsd_flyio_nanodjango`
@@ -122,7 +131,7 @@ Deployment target: Fly.io
 We can inspect the changes, and commit them:
 
 ```sh
-(.venv) my_nd_project$ git status
+(.venv) nd_counter$ git status
 On branch main
 Changes not staged for commit:
 	modified:   .gitignore
@@ -130,21 +139,21 @@ Untracked files:
 	.dockerignore
 	Dockerfile
 	fly.toml
-(.venv) my_nd_project$ git add .
-(.venv) my_nd_project$ git commit -am "Configured for deployment to Fly."
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Configured for deployment to Fly."
 ```
 
 Now we make the actual push to Fly:
 
 ```sh
-(.venv) my_nd_project$ fly deploy
+(.venv) nd_counter$ fly deploy
 ...
 ```
 
 Once the push finishes, you can open the deployed version of your project:
 
 ```sh
-(.venv) my_nd_project$ fly apps open
+(.venv) nd_counter$ fly apps open
 opening https://nameless-bird-5390.fly.dev/ ...
 ```
 
@@ -153,7 +162,7 @@ The counter will increment. In the 0.1.0 release of this plugin, the count will 
 When you're satisfied it works, make sure to destroy the deployed app if you don't want to accrue charges:
 
 ```sh
-(.venv) my_nd_project$ fly apps destroy nameless-bird-5390
+(.venv) nd_counter$ fly apps destroy nameless-bird-5390
 Destroying an app is not reversible.
 ? Destroy app nameless-bird-5390? Yes
 Destroyed app nameless-bird-5390
@@ -170,7 +179,7 @@ Install this plugin:
 $ uv pip install dsd-flyio-nanodjango
  + django-simple-deploy==1.3.0
  + dsd-flyio-nanodjango==0.1.0
- (.venv) my_nd_project$ uv pip freeze > requirements.txt
+ (.venv) nd_counter$ uv pip freeze > requirements.txt
 ```
 
 Add `django_simple_deploy` to the project script:
@@ -191,8 +200,8 @@ class CountLog(models.Model):
 Commit all these changes:
 
 ```sh
-(.venv) my_nd_project$ git add .
-(.venv) my_nd_project$ git commit -am "Initial setup, and added django-simple-deploy."
+(.venv) nd_counter$ git add .
+(.venv) nd_counter$ git commit -am "Initial setup, and added django-simple-deploy."
 ```
 
 Call `deploy`, with the `--automate-all` flag:
@@ -200,7 +209,7 @@ Call `deploy`, with the `--automate-all` flag:
 We're ready to call `deploy`, which will configure for deployment to Fly:
 
 ```sh
-(.venv) my_nd_project$ nanodjango manage counter.py deploy --automate-all
+(.venv) nd_counter$ nanodjango manage counter.py deploy --automate-all
 ...
 Deployment target: Fly.io
   Using plugin: dsd_flyio_nanodjango`
@@ -218,7 +227,7 @@ It should have opened up in a new browser tab. If you see a
 When you're satisfied it works, make sure to destroy the deployed app if you don't want to accrue charges:
 
 ```sh
-(.venv) my_nd_project$ fly apps destroy nameless-bird-5390
+(.venv) nd_counter$ fly apps destroy nameless-bird-5390
 Destroying an app is not reversible.
 ? Destroy app nameless-bird-5390? Yes
 Destroyed app nameless-bird-5390
